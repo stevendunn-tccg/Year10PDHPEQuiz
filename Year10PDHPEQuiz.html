@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Year 10 PDHPE Quiz</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f9f9f9; padding: 20px; max-width: 900px; margin: auto; }
+    h1 { text-align: center; }
+    .question { margin-bottom: 20px; }
+    .question h3 { margin-bottom: 10px; }
+    .options label { display: block; margin-bottom: 5px; }
+    .button { padding: 10px 20px; font-weight: bold; margin-top: 20px; cursor: pointer; }
+    #result { margin-top: 30px; font-size: 18px; font-weight: bold; text-align: center; }
+  </style>
+</head>
+<body>
+  <h1>Year 10 PDHPE Quiz</h1>
+  <form id="quizForm"></form>
+  <button class="button" onclick="submitQuiz()">Submit Quiz</button>
+  <div id="result"></div>
+
+  <script>
+    const questions = [
+      { q: "Which organ produces eggs in the female reproductive system?", a: "B", options: ["Uterus", "Ovary", "Vagina", "Fallopian tube"] },
+      { q: "What is the main function of the uterus?", a: "C", options: ["To produce hormones", "To store eggs", "To support a developing fetus", "To release urine"] },
+      { q: "What is the role of the fallopian tubes?", a: "B", options: ["To produce sperm", "To transport eggs to the uterus", "To regulate hormones", "To protect the ovaries"] },
+      { q: "How do condoms help prevent pregnancy and STIs?", a: "B", options: ["By releasing hormones", "By blocking sperm and reducing skin contact", "By killing bacteria", "By increasing body temperature"] },
+      { q: "Which of the following is a bacterial STI?", a: "C", options: ["Herpes", "HIV", "Chlamydia", "HPV"] },
+      { q: "Which of the following is a viral STI?", a: "D", options: ["Gonorrhoea", "Syphilis", "Chlamydia", "Herpes"] },
+      { q: "Why might chlamydia rates differ between males and females?", a: "C", options: ["Females are less likely to be tested", "Males cannot contract chlamydia", "Females often show no symptoms", "Males have stronger immune systems"] },
+      { q: "What is the main difference between hormonal and barrier contraception?", a: "C", options: ["Hormonal methods block sperm", "Barrier methods change hormone levels", "Hormonal methods alter body chemistry; barrier methods block sperm", "Both methods prevent STIs"] },
+      { q: "Which of the following is a dangerous driving behaviour?", a: "B", options: ["Using indicators", "Speeding", "Wearing a seatbelt", "Checking mirrors"] },
+      { q: "What is a possible consequence of texting while driving?", a: "C", options: ["Improved reaction time", "Reduced fuel use", "Increased crash risk", "Better navigation"] },
+      { q: "What is one leading cause of road fatalities in NSW?", a: "B", options: ["Loud music", "Fatigue", "Clean roads", "Seatbelt use"] },
+      { q: "Which of the following is another leading cause of road fatalities in NSW?", a: "B", options: ["Driving under the speed limit", "Alcohol", "Wearing sunglasses", "Using GPS"] },
+      { q: "What is the third leading cause of road fatalities in NSW?", a: "A", options: ["Distraction", "Rain", "Airbags", "Road signs"] },
+      { q: "How do airbags help protect passengers?", a: "B", options: ["They increase speed", "They reduce impact force", "They prevent seatbelt use", "They block visibility"] },
+      { q: "What is the purpose of crumple zones in vehicles?", a: "B", options: ["To make cars lighter", "To absorb crash energy", "To improve fuel efficiency", "To reduce tyre wear"] },
+      { q: "Which rule applies specifically to P-plate drivers in NSW?", a: "C", options: ["No seatbelt required", "Unlimited passengers", "Zero blood alcohol limit", "No speed limits"] },
+      { q: "How does alcohol affect driving performance?", a: "B", options: ["Improves focus", "Slows reaction time", "Enhances coordination", "Increases alertness"] },
+      { q: "What is a gender stereotype?", a: "C", options: ["A proven fact about gender", "A personal opinion", "A generalised belief about men or women", "A legal rule"] },
+      { q: "How can gender stereotypes affect identity?", a: "B", options: ["They encourage individuality", "They limit self-expression", "They promote diversity", "They improve confidence"] },
+      { q: "How can media influence body image?", a: "C", options: ["By promoting only realistic standards", "By encouraging natural beauty", "By shaping perceptions of attractiveness", "By banning photo editing"] },
+      { q: "What is one risk of comparing yourself to social media images?", a: "C", options: ["Improved self-esteem", "Exposure to diverse views", "Unrealistic expectations", "Better health choices"] },
+      { q: "What is one action to prevent cyberbullying?", a: "C", options: ["Share passwords", "Ignore messages", "Report and block the bully", "Delete your account"] },
+      { q: "What is another action to prevent cyberbullying?", a: "A", options: ["Use strong privacy settings", "Post personal details", "Accept unknown friend requests", "Avoid all technology"] },
+      { q: "What is a digital footprint?", a: "B", options: ["A physical trace left online", "A record of online activity", "A type of shoe", "A virus"] },
+      { q: "Why does your digital footprint matter?", a: "B", options: ["It affects your internet speed", "It can influence future opportunities", "It improves your gaming skills", "It deletes old posts"] },
+      { q: "Which online privacy setting helps protect personal information?", a: "C", options: ["Public profile", "Location sharing", "Two-factor authentication", "Auto-login"] },
+      { q: "What is resilience?", a: "C", options: ["Giving up when challenged", "Avoiding difficult tasks", "Bouncing back from setbacks", "Ignoring feedback"] },
+      { q: "Which is an example of resilience in sport?", a: "C", options: ["Quitting after a loss", "Blaming teammates", "Practicing after a defeat", "Skipping training"] },
+      { q: "How can a team game like 5-a-side soccer be made more inclusive?", a: "B", options: ["Use complex rules", "Allow mixed ability teams", "Exclude beginners", "Focus only on winning"] },
+      { q: "What is an example of respectful communication in conflict?", a: "B", options: ["Yelling to be heard", "Listening actively", "Interrupting often", "Ignoring the other person"] }
+    ];
+
+    const form = document.getElementById("quizForm");
+
+    questions.forEach((item, index) => {
+      const qDiv = document.createElement("div");
+      qDiv.className = "question";
+      const qTitle = document.createElement("h3");
+      qTitle.textContent = `${index + 1}. ${item.q}`;
+      qDiv.appendChild(qTitle);
+
+      item.options.forEach((opt, i) => {
+        const label = document.createElement("label");
+        const radio = document.createElement("input");
+        radio.type = "radio";
+        radio.name = `q${index + 1}`;
+        radio.value = String.fromCharCode(65 + i); // A, B, C, D
+        label.appendChild(radio);
+        label.appendChild(document.createTextNode(` ${String.fromCharCode(65 + i)}) ${opt}`));
+        qDiv.appendChild(label);
+      });
+
+      form.appendChild(qDiv);
+    });
+
+    function submitQuiz() {
+      let score = 0;
+      questions.forEach((item, index) => {
+        const selected = document.querySelector(`input[name="q${index + 1}"]:checked`);
+        if (selected && selected.value === item.a) {
+          score++;
+        }
+      });
+      document.getElementById("result").textContent = `You scored ${score} out of ${questions.length}.`;
+      document.getElementById("result").textContent = `You scored ${score} out of ${questions.length}.`;
+    }
+  </script>
+</body>
+</html>
+
